@@ -56,6 +56,8 @@ extern int SIZE_Y;
 extern int MOUSE_MODE;
 extern Pos p0;
 extern std::vector< std::vector<Pos> > gPaths;
+extern int numPaths;
+extern int countPath;
 
 //-- SDL Functions
 bool init();
@@ -70,8 +72,13 @@ Pos GetMousePos( int _x, int _y );
 void display_options();
 void clip_tiles();
 void DrawScene( Grid2D *_g );
+void DrawPath( int _index );
 
 //-- Planner function (HA!)
 void CallPlanner( Grid2D *_g, HP2D *_h );
+
+//-- Utility stuff
+void createBorderingObstacles( Grid2D *_g );
+
 
 #endif /** _TEST_SDL_H_ */

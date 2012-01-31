@@ -18,8 +18,8 @@ int SCREEN_HEIGHT;
 const int SCREEN_BPP = 32;
 
 //-- Tile constants
-const int TILE_WIDTH = 80;
-const int TILE_HEIGHT = 80;
+const int TILE_WIDTH = 40;
+const int TILE_HEIGHT = 40;
 const int TILE_SPRITES = 5;
 
 //-- Sprites
@@ -41,6 +41,8 @@ int SIZE_Y;
 int MOUSE_MODE;
 Pos p0;
 std::vector< std::vector<Pos> > gPaths;
+int numPaths;
+int countPath;
 /////////////////////////////////////////////////
 
 
@@ -50,6 +52,7 @@ std::vector< std::vector<Pos> > gPaths;
 int main( int argc, char *argv[] ) {
 
 	bool quit = false;
+	countPath = 0;
 
 	//-- Initialize
 	if( init() == false ) {
@@ -69,6 +72,9 @@ int main( int argc, char *argv[] ) {
 
 	//-- Create HomoPath object
     HP2D h( &g );
+
+	//-- Put the obstacles in the borders
+    createBorderingObstacles( &g );
 
 	//-- Display options
 	display_options();
@@ -102,7 +108,13 @@ int main( int argc, char *argv[] ) {
 					case 'x': {
 						printf("-- Pick a grid to check the possible paths \n");
 						MOUSE_MODE = 2;
+						countPath = 0; // Start seeing the first path
 						break;
+					}
+					case 'p': {
+						printf("-- Check available paths for designated grid \n");
+						countPath++;
+						countPath = ( countPath % numPaths );
 					}
 					case 'q': {
 						display_options();
@@ -139,6 +151,7 @@ int main( int argc, char *argv[] ) {
 						case 2: {
 							printf( "--> Locating paths for (%d %d) \n", p.x, p.y );
 							gPaths = h.PrintPath(p);
+							numPaths = gPaths.size();
 							printf("--* To see options again press [q] \n");			
 							break;
 						}
@@ -182,8 +195,8 @@ void CallPlanner( Grid2D *_g, HP2D *_h ) {
  */
 bool init() {
 
-	SIZE_X = 5; 
-    SIZE_Y = 5;	
+	SIZE_X = 14; 
+    SIZE_Y = 14;	
 	Vertex::minX = 0;
 	Vertex::maxX = SIZE_X - 1;
 	Vertex::minY = 0;
@@ -213,6 +226,33 @@ bool init() {
 
 	//-- If everything initialized fine
 	return true;
+}
+
+/**
+ * @function createBorderingObstacles
+ */
+void createBorderingObstacles( Grid2D *_g ) {
+
+	Pos p; 
+
+	for( int i = 0; i < SIZE_X; ++i ) {
+
+		p.x = i; p.y = 0;
+		_g->SetState( p, true );
+
+		p.x = i; p.y = SIZE_Y - 1; 
+		_g->SetState( p, true );
+	} 	
+
+	for( int j = 0; j < SIZE_Y; ++j ) {
+
+		p.x = 0; p.y = j;
+		_g->SetState( p, true );
+
+		p.x = SIZE_X - 1; p.y = j; 
+		_g->SetState( p, true );
+	} 	
+
 }
 
 

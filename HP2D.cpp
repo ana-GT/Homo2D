@@ -4,7 +4,7 @@
 
 #include "HP2D.h"
 
-int HP2D::DIST_MAX = 7;
+int HP2D::DIST_MAX = 28;
 
 /**
  * @function HP2D

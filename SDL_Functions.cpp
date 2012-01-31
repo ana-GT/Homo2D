@@ -14,6 +14,18 @@ Pos GetMousePos( int _x, int _y ) {
 }
 
 /**
+ * @function DrawPath
+ */
+void DrawPath( int _index ) {
+
+	///  Draw paths
+	for( unsigned int j = 0; j < gPaths[_index].size(); ++j ) {
+		apply_surface( TILE_WIDTH*(gPaths[_index][j].x), TILE_HEIGHT*(gPaths[_index][j].y), paths, screen, &clipsPaths[_index] );	
+	}
+
+}
+
+/**
  * @function DrawScene
  */
 void DrawScene( Grid2D *_g ) {
@@ -41,14 +53,9 @@ void DrawScene( Grid2D *_g ) {
 		apply_surface( TILE_WIDTH*(p0.x), TILE_HEIGHT*(p0.y), v0, screen, &clips[TILE_V0] );		
 	}
 	
-
-	///  Draw paths
-    int ind = 0;
-	for( unsigned int i = 0; i < gPaths.size(); ++i ) {
-		for( unsigned int j = 0; j < gPaths[i].size(); ++j ) {
-			apply_surface( TILE_WIDTH*(gPaths[i][j].x), TILE_HEIGHT*(gPaths[i][j].y), paths, screen, &clipsPaths[ind] );	
-		}
-		++ind;
+	/// Draw Path
+	if( countPath >= 0 && numPaths > 0 ) {
+		DrawPath( countPath );
 	}
 
 	/// Update the screen
@@ -200,5 +207,6 @@ void display_options() {
 	printf( "--(*) Press [o] to set obstacles \n" );
 	printf( "--(*) Press [v] to set v0 \n" );
 	printf( "--(*) Press [x] to find the paths to the grid \n" );
+	printf( "--(*) Press [p] to see the diverse paths \n" );
 	printf( "\n" );
 }
